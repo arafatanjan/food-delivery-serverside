@@ -176,9 +176,9 @@ app.listen(port, () => {
 // });
 
 
-// app.get('/', (req, res) => {
-//     res.send('QT World!');
-// });
+app.get('/', (req, res) => {
+    res.send('QT World!');
+});
 
 // app.get('/users', (req, res) => {
 //     res.send('QTY World!');
