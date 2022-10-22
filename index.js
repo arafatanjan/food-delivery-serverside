@@ -28,6 +28,7 @@ async function run() {
         // const database = client.db("foodmaster");
         // const usersCollection = database.collection("users");
         const usersCollection = database.collection("services");
+        const ordersCollection = database.collection("orders");
 
         // GET API
         app.get('/services', async (req, res) => {
@@ -48,22 +49,33 @@ async function run() {
             res.json(service);
         })
         //post API
-        // app.post('/users', async (req, res) => {
-        //     const newUser = req.body;
-        //     const result = await usersCollection.insertOne(newUser);
-        //     console.log('got new user', req.body);
-        //     console.log('added user', result);
-        //     res.json(result);
-        // });
+        app.post('/orders', async (req, res) => {
+            // res.send('added user');
+            const newUser = req.body;
+            const result = await ordersCollection.insertOne(newUser);
+            console.log('added user', result);
+            res.json(result);
+        });
+
+        // GET API
+        app.get('/orders', async (req, res) => {
+
+            const cursor = ordersCollection.find({})
+            const orders = await cursor.toArray();
+            // res.send(users);
+            res.json(orders);
+        });
+
+        // GET API
+        app.get('/orders/:email', async (req, res) => {
+            console.log(req.params.email);
+            const result = await ordersCollection.find({ email: req.params.email }).toArray();
+            res.json(result);
+        });
         //post API
         app.post('/services', async (req, res) => {
             const service = req.body;
-            // const service = {
-            //     "name": "White cavity fillings",
-            //     "description": "White (composite) fillings are made out of powdered glass and ceramic added to a resin base, which comes out to a shade of white which matches your teeth..",
-            //     "price": 100,
-            //     "img": "https://i.ibb.co/CQSx2C8/demo-3.jpg",
-            // };
+
             const result = await usersCollection.insertOne(service);
             // console.log('Hit the post', service);
             console.log(result);
@@ -80,13 +92,13 @@ async function run() {
         //     res.send(user);
         // })
         // delete
-        // app.delete('/users/:id', async (req, res) => {
-        //     const id = req.params.id;
-        //     const query = { _id: ObjectId(id) };
-        //     const result = await usersCollection.deleteOne(query);
-        //     console.log('deleting user id', result);
-        //     res.json(result);
-        // })
+        app.delete('/orders/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) };
+            const result = await ordersCollection.deleteOne(query);
+            console.log('deleting user id', result);
+            res.json(result);
+        })
         // delete
         app.delete('/services/:id', async (req, res) => {
             const id = req.params.id;
