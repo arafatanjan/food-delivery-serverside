@@ -68,7 +68,7 @@ async function run() {
 
         // GET API
         app.get('/orders/:email', async (req, res) => {
-            console.log(req.params.email);
+            // console.log(req.params.email);
             const result = await ordersCollection.find({ email: req.params.email }).toArray();
             res.json(result);
         });
@@ -106,6 +106,23 @@ async function run() {
             const result = await usersCollection.deleteOne(query);
             console.log('deleting user id', result);
             res.json(result);
+        })
+
+        //put
+        app.put('/orders/update/:id', async (req, res) => {
+            const id = req.params.id;
+            // console.log(id);
+            const updatedStatus = 'updated';
+            const filter = { _id: ObjectId(id) };
+            const options = { upsert: true };
+            const updateDoc = {
+                $set: {
+                    status: updatedStatus
+                },
+            };
+            const result = await ordersCollection.updateOne(filter, updateDoc, options)
+            console.log('j')
+            res.json(result)
         })
 
 
